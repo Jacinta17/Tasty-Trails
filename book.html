@@ -6,15 +6,44 @@
     <title>Book a Table</title>
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
-    <script defer src="book.js"></script>
     <link rel="icon" type="image/png" href="images/logo.png">
+    <script defer src="book.js"></script>
+
+    <!-- Firebase SDKs -->
+  <!-- Add this inside the <head> tag -->
+<!-- Add Firebase SDK inside <head> in book.html -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyClSng8h_UOi_p3Ps2G8vtx9xG9hUuFnqI",
+            authDomain: "portfolio-36820.firebaseapp.com",
+            projectId: "portfolio-36820",
+            storageBucket: "portfolio-36820.appspot.com",
+            messagingSenderId: "289359675759",
+            appId: "1:289359675759:web:fc00d1cf51a9161317a89a",
+            measurementId: "G-JFKRGFG2QC"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+    
+        // Expose Firestore globally for book.js
+        window.db = db;
+        window.addDoc = addDoc;
+        window.collection = collection;
+    </script>
+    
+
+
     <style>
         body {
             background: url('images/book.png') no-repeat center center fixed;
             background-size: cover;
             position: relative;
         }
-
         body::before {
             content: "";
             position: absolute;
@@ -25,11 +54,10 @@
             background: rgba(0, 0, 0, 0.4); /* Adjust opacity */
             z-index: -1;
         }
-
         .container {
             position: relative;
             z-index: 1;
-            background: rgba(255, 255, 255, 0.8); /* Slightly transparent */
+            background: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 10px;
             max-width: 500px;
@@ -37,7 +65,6 @@
             text-align: center;
             color: black;
         }
-
     </style>
 </head>
 <body>

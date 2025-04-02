@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Bookings</title>
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyClSng8h_UOi_p3Ps2G8vtx9xG9hUuFnqI",
+            authDomain: "portfolio-36820.firebaseapp.com",
+            projectId: "portfolio-36820",
+            storageBucket: "portfolio-36820.appspot.com",
+            messagingSenderId: "289359675759",
+            appId: "1:289359675759:web:fc00d1cf51a9161317a89a",
+            measurementId: "G-JFKRGFG2QC"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to fetch and display bookings
+        function loadBookings() {
+            const bookingsTable = document.getElementById("bookingsTable");
+            bookingsTable.innerHTML = `<tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Guests</th>
+            </tr>`;
+
+            // Listen for real-time updates
+            onSnapshot(collection(db, "bookings"), (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        const booking = change.doc.data();
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${booking.name}</td>
+                            <td>${booking.date}</td>
+                            <td>${booking.time}</td>
+                            <td>${booking.guests}</td>
+                        `;
+                        bookingsTable.appendChild(row);
+                    }
+                });
+            });
+        }
+
+        // Load bookings when the page is loaded
+        window.onload = loadBookings;
+    </script>
+
+    <style>
+        body {
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        td {
+    color: black; /* Ensures text inside table cells is black */
+        }
+
+        th {
+            background: #007bff;
+            color: rgb(0, 0, 0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Admin Panel - View Bookings</h2>
+        <table id="bookingsTable">
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Guests</th>
+            </tr>
+        </table>
+    </div>
+
+</body>
+</html>

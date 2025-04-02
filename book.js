@@ -1,19 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("JavaScript loaded!"); // Check if script is loading
-
     const bookingForm = document.getElementById("bookingForm");
-    const confirmationMessage = document.getElementById("confirmationMessage");
 
-    if (!bookingForm || !confirmationMessage) {
-        console.error("Form or confirmation message NOT found!");
-        return;
-    }
+    bookingForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    bookingForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Stop default reload
-        console.log("Form submitted!"); // Debug message
-
-        // Get values
+        // Get values from form
         const name = document.getElementById("name").value.trim();
         const date = document.getElementById("date").value;
         const time = document.getElementById("time").value;
@@ -24,15 +15,26 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Show confirmation
-        confirmationMessage.textContent = `Thank you, ${name}! Your table for ${guests} guest(s) is booked on ${date} at ${time}.`;
-        confirmationMessage.style.display = "block";
-        
-        setTimeout(() => {
-            confirmationMessage.style.display = "none";
-        }, 5000);
+        console.log("Submitting booking:", { name, date, time, guests });
 
-        // Clear form
-        bookingForm.reset();
+        try {
+            const db = window.db;
+            const addDoc = window.addDoc;
+            const collection = window.collection;
+
+            const docRef = await addDoc(collection(db, "bookings"), {
+                name: name,
+                date: date,
+                time: time,
+                guests: parseInt(guests)
+            });
+
+            console.log("Booking stored with ID: ", docRef.id);
+            alert("Booking Successful!");
+            bookingForm.reset();
+        } catch (error) {
+            console.error("Error adding document: ", error);
+            alert("Booking failed! Check console for details.");
+        }
     });
 });

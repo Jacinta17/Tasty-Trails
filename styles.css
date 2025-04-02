@@ -166,8 +166,8 @@ body {
 /* ------ BOOK A TABLE FORM ------ */
 .container {
     width: 90%;
+    margin-top: 80px;
     max-width: 450px;
-    margin: 50px auto;
     padding: 20px;
     background: rgba(128, 0, 32, 0.9);
     color: white;
